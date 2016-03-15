@@ -54,7 +54,7 @@ class PartitionConsumer(
         println(s"Consumed [${partitionRecords.size}] messages for partition [$partitionTenant]")
 
         // always commit the next message to be consumed
-        val offsetToCommit = partitionRecords.last.offset() + 1L
+        val offsetToCommit = partitionRecords.last.offset + 1L
 
         // commit offset for the partition
         consumer.commitSync(Map(partition -> new OffsetAndMetadata(offsetToCommit)))

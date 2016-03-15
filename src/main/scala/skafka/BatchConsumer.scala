@@ -41,14 +41,14 @@ class BatchConsumer(partitionsToConsume: Seq[TopicPartition], tenantMap: Map[Str
         println(s"Fetched [${partitionRecords.size}] records with starting offset [${partitionRecords.head.offset()}]")
 
         // seem to lose ordering with the implicit conversion
-        val recordBatch = partitionRecords.sortBy(_.offset()).take(BatchSize)
+        val recordBatch = partitionRecords.sortBy(_.offset).take(BatchSize)
 
         // mapped tenant for the partition number
         val partitionTenant = tenantMap.map(_.swap).get(partition.partition())
         println(s"Consumed [${recordBatch.size}] messages for partition [$partitionTenant]")
 
         // always commit the next message to be consumed
-        val offsetToCommit = recordBatch.last.offset() + 1L
+        val offsetToCommit = recordBatch.last.offset + 1L
 
         // commit offset for the partition
         consumer.commitSync(Map(partition -> new OffsetAndMetadata(offsetToCommit)))
